@@ -6,7 +6,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: '/api/proxy/:path*',
+        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/:path*`,
       },
     ]
   },

@@ -1,6 +1,4 @@
 import Link from, 'next/link';
-import Image from 'next/image';
-import styles from './page.module.css';
 
 export default function Home() {
     return (
@@ -10,7 +8,7 @@ export default function Home() {
                     <h1 className='text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent'>
                     Welcome to AI Travel Planner
                     </h1>
-                    <p className='text-xl text-gray-700'>
+                    <p className='text-xl text-gray-600'>
                     Plan your trips with AI-powered tools. Discover new places, create itineraries, and get personalized recommendations.
                 </p>
             </div>
@@ -55,6 +53,7 @@ export default function Home() {
                 </div>
             </div>
         </div>
+
         <div className='grid md:grid-cols-3 gap-6'>
           <div className='bg-white p-6 rounded-xl shadow-md'>
             <div className='text-4xl mb-3'>💬</div>

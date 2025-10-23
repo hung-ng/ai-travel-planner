@@ -1,3 +1,9 @@
+export interface Message {
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp?: Date;
+}
+
 export interface Trip {
     id: number;
     user_id: number;
@@ -20,5 +26,4 @@ export interface ChatRequest {
 export interface ChatResponse {
     message: string;
     conversation_id: number;
-    trip_id?: number;
 }
