@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import ChatInterface from '@/components/ChatInterface';
 import { api } from '@/lib/api';
 import Link from 'next/link';
@@ -10,7 +9,6 @@ export default function ChatPage() {
   const [tripId, setTripId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     initializeTrip();

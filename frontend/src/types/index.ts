@@ -8,8 +8,8 @@ export interface Trip {
     id: number;
     user_id: number;
     destination: string;
-    startDate: string;
-    endDate: string;
+    start_date: string;
+    end_date: string;
     budget: number | null;
     status: string;
     itinerary: any | null;
