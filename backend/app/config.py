@@ -1,32 +1,43 @@
 from pydantic_settings import BaseSettings
-from typing import Optional
 
 class Settings(BaseSettings):
     # OpenAI
     OPENAI_API_KEY: str
+    OPENAI_MODEL: str = "gpt-4.1-nano"
+    OPENAI_TEMPERATURE: float = 0.7
+    OPENAI_MAX_TOKENS: int = 2000
+    OPENAI_EMBEDDING_MODEL: str = "text-embedding-3-small"
     
-    # Database
-    DATABASE_URL: str = "postgresql://travelapp:devpassword123@localhost:5432/travel_planner"
+    # PostgreSQL
+    DATABASE_URL: str
     
     # ChromaDB
-    CHROMA_URL: str = "http://localhost:8001"
+    CHROMA_URL: str
     
     # Redis (optional)
-    REDIS_URL: str = "redis://localhost:6379"
+    REDIS_URL: str
     
     # Security
-    SECRET_KEY: str = "your-secret-key-change-in-production"
+    SECRET_KEY: str
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     
-    # API Settings (add these)
+    # API Settings
     API_HOST: str = "0.0.0.0"
     API_PORT: int = 8000
     DEBUG: bool = True
+
+    # Context Window
+    CONTEXT_WINDOW_SIZE: int = 10
+    CONTEXT_SUMMARIZE_THRESHOLD: int = 15
+    
+    #RAG Configurations
+    RAG_TOP_K: int = 10
+    RAG_SIMILARITY_THRESHOLD: float = 0.5
     
     class Config:
         env_file = ".env"
-        case_sensitive = True  # Match exact case in .env
-        extra = "ignore"  # Ignore extra fields not in the model
+        case_sensitive = True
+        extra = "ignore"
 
 settings = Settings()
