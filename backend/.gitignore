@@ -2,6 +2,7 @@
 __pycache__/
 *.pyc
 venv/
+.venv/
 .env
 *.log
 alembic/versions/__pycache__/
