@@ -105,6 +105,9 @@ class VectorStore:
             ids = []
             valid_embeddings = []
             
+            # Track seen IDs to prevent duplicates within this batch
+            seen_ids = set()
+
             for i, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
                 if embedding is None:
                     logger.warning(f"Skipping chunk {i} - no embedding")
@@ -122,17 +125,24 @@ class VectorStore:
                 # Combine city, source, and content hash for ID
                 # This ensures same content = same ID = no duplicates!
                 doc_id = f"{city}_{source}_{text_hash}"
-                
+
+                # Skip if we've already seen this ID in this batch
+                if doc_id in seen_ids:
+                    logger.debug(f"Skipping duplicate ID within batch: {doc_id}")
+                    continue
+
+                seen_ids.add(doc_id)
+
                 # Prepare document text
                 documents.append(chunk["text"])
-                
+
                 # Prepare metadata (exclude text and embedding)
                 metadata = {k: v for k, v in chunk.items() if k not in ["text", "embedding"]}
                 metadata["added_at"] = datetime.now().isoformat()
-                
+
                 # Convert all values to strings (ChromaDB requirement)
                 metadata = {k: str(v) for k, v in metadata.items()}
-                
+
                 metadatas.append(metadata)
                 ids.append(doc_id)
                 valid_embeddings.append(embedding)
