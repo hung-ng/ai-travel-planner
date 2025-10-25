@@ -8,7 +8,15 @@ from sqlalchemy.pool import StaticPool
 from unittest.mock import MagicMock, AsyncMock, patch
 from datetime import datetime, timedelta
 import sys
+import os
 from pathlib import Path
+
+# Set test environment variables BEFORE importing app modules
+os.environ.setdefault("OPENAI_API_KEY", "test-key-12345")
+os.environ.setdefault("DATABASE_URL", "sqlite:///:memory:")
+os.environ.setdefault("CHROMA_URL", "http://localhost:8001")
+os.environ.setdefault("REDIS_URL", "redis://localhost:6379")
+os.environ.setdefault("SECRET_KEY", "test-secret-key-for-testing-only")
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -83,9 +91,9 @@ def mock_openai_client():
         yield mock_client
 
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture(scope="function")
 def mock_chromadb():
-    """Mock ChromaDB for all tests"""
+    """Mock ChromaDB (use explicitly when needed, not autouse to avoid conflicts)"""
     
     class MockCollection:
         def __init__(self):
