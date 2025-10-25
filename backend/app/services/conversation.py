@@ -1,6 +1,6 @@
-from app.services.ai_service import ai_service
-from app.services.rag_service import rag_service
-from app.services.context_manager import context_manager
+from app.services.ai import chat_service
+from app.services.rag import retrieval_service
+from app.services.context import context_manager, query_enhancer
 from app.config import settings
 import json
 from typing import List, Dict
@@ -53,11 +53,27 @@ class ConversationService:
         )
         if context_description:
             print(f"[CONTEXT] Context description: {context_description[:200]}...")
+            print(f"[CONTEXT] Context: {json.dumps(updated_context, indent=2)}")
+
 
         # Step 3: Get relevant context from RAG
         print(f"\n[RAG] Searching vector database...")
-        rag_results = await rag_service.search(
-            query=user_message, n_results=10  # Increased from 5 since we have room
+
+        # Enhance query with extracted context for better retrieval
+        enhanced_query = query_enhancer.enhance_query(user_message, updated_context)
+        if enhanced_query != user_message:
+            print(f"[RAG] Original query: '{user_message}'")
+            print(f"[RAG] Enhanced query: '{enhanced_query}'")
+
+        # Create metadata filter based on context
+        metadata_filter = query_enhancer.create_contextual_filter(updated_context)
+        if metadata_filter:
+            print(f"[RAG] Using metadata filter: {metadata_filter}")
+
+        rag_results = await retrieval_service.search(
+            query=enhanced_query,
+            n_results=10,
+            filter_metadata=metadata_filter
         )
 
         rag_context = ""
@@ -72,6 +88,7 @@ class ConversationService:
             rag_context=rag_context,
             context_description=context_description,
             trip_context=trip_context,
+            conversation_context=updated_context,
         )
 
         # Step 5: Prepare messages for AI
@@ -85,7 +102,7 @@ class ConversationService:
         )
 
         # Step 6: Call AI
-        response = await ai_service.chat_completion(
+        response = await chat_service.get_completion(
             messages=messages,
             temperature=settings.OPENAI_TEMPERATURE,
             max_tokens=settings.OPENAI_MAX_TOKENS,
@@ -108,7 +125,11 @@ class ConversationService:
         return response, updated_context, updated_summary
 
     def _build_system_prompt(
-        self, rag_context: str, context_description: str, trip_context: Dict
+        self,
+        rag_context: str,
+        context_description: str,
+        trip_context: Dict,
+        conversation_context: Dict = None
     ) -> str:
         """Build system prompt with all context"""
 
@@ -119,6 +140,12 @@ class ConversationService:
         # Add context description if exists
         if context_description:
             parts.append(f"\nCONVERSATION CONTEXT:\n{context_description}")
+
+        # Add extracted context (duration, budget, travel_style) from conversation
+        if conversation_context:
+            additional_context = query_enhancer.get_context_for_prompt(conversation_context)
+            if additional_context:
+                parts.append(f"\nUSER PREFERENCES:\n{additional_context}")
 
         # Add RAG context if exists
         if rag_context:

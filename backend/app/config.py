@@ -33,7 +33,7 @@ class Settings(BaseSettings):
     
     #RAG Configurations
     RAG_TOP_K: int = 10
-    RAG_SIMILARITY_THRESHOLD: float = 0.5
+    RAG_SIMILARITY_THRESHOLD: float = 0.4
     
     class Config:
         env_file = ".env"
