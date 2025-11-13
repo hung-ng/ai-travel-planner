@@ -6,18 +6,9 @@ import {Message} from '@/types';
 import MessageBubble from './MessageBubble';
 import LoadingSpinner from './LoadingSpinner';
 
-const mockSendMessage = async (message: string) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  return {
-    message: `AI Response to: ${message}`,
-    conversation_id: 1
-  };
-};
-
-interface Message {
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: Date;
+interface ChatInterfaceProps {
+  tripId: number;
+  userId?: number;
 }
 
 const quickPrompts = [
@@ -58,7 +49,8 @@ const suggestionsByContext = {
   ]
 };
 
-export default function EnhancedChatInterface() {
+// props
+export default function ChatInterface({ tripId, userId = 1 }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
@@ -98,7 +90,12 @@ export default function EnhancedChatInterface() {
     setShowQuickPrompts(false);
 
     try {
-      const response = await mockSendMessage(textToSend);
+      //props
+      const response = await api.sendMessage({
+        message: textToSend,
+        trip_id: tripId,
+        user_id: userId,
+      });
       
       const assistantMessage: Message = {
         role: 'assistant',
@@ -107,6 +104,7 @@ export default function EnhancedChatInterface() {
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
+
     } catch (error) {
       console.error('Error:', error);
       const errorMessage: Message = {

@@ -47,6 +47,10 @@ export default function Home() {
                                     className="block w-full text-center bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl">
                                     Start Planning Now
                                 </Link>
+                                 <Link href='/dashboard' 
+                                    className="block w-full text-center bg-gradient-to-r from-purple-500 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-purple-600 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl">
+                                    View My Trips
+                                </Link>
                                 <p className="text-center text-sm text-gray-500">
                                     No credit card required. Get started for free!
                                 </p>
