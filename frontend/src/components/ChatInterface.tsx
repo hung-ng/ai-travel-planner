@@ -156,7 +156,7 @@ export default function ChatInterface({ tripId, userId = 1 }: ChatInterfaceProps
                 }`}>
                   <p className="whitespace-pre-wrap break-words">{msg.content}</p>
                   <p className={`text-xs mt-1 ${isUser ? 'text-blue-100' : 'text-gray-500'}`}>
-                    {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    {msg.timestamp?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
               </div>
