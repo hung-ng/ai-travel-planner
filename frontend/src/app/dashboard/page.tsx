@@ -231,10 +231,10 @@ export default function TripDashboard() {
           <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Total Budget</p>
-                <p className="text-2xl font-bold text-purple-600">${stats.totalBudget.toLocaleString()}</p>
+                <p className="text-sm text-gray-600">Completed</p>
+                <p className="text-3xl font-bold text-purple-600">{stats.completed}</p>
               </div>
-              <div className="text-4xl">💰</div>
+              <div className="text-4xl">🎉</div>
             </div>
           </div>
         </div>
@@ -350,16 +350,13 @@ export default function TripDashboard() {
                     </div>
 
                     {/* Actions */}
-                    <div className="mt-5 pt-4 border-t border-gray-200 flex gap-2">
+                    <div className="mt-5 pt-4 border-t border-gray-200">
                       <Link
                         href={`/chat?tripId=${trip.id}`}
-                        className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-lg text-center text-sm font-medium hover:bg-blue-600 transition-colors"
+                        className="block w-full bg-blue-500 text-white px-4 py-2 rounded-lg text-center text-sm font-medium hover:bg-blue-600 transition-colors"
                       >
                         Continue Planning
                       </Link>
-                      <button className="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
-                        👁️
-                      </button>
                     </div>
                   </div>
                 </div>
