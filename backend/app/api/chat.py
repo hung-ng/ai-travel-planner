@@ -5,7 +5,7 @@ from app.schemas.chat import ChatRequest, ChatResponse
 from app.models.conversation import Conversation
 from app.models.trip import Trip
 from app.services.conversation import conversation_service
-from app.services.context_manager import context_manager
+from app.services.context import context_manager
 
 router = APIRouter()
 

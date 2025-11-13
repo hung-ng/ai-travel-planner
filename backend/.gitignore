@@ -7,3 +7,9 @@ venv/
 *.log
 alembic/versions/__pycache__/
 /chroma_db
+.coverage
+
+# Data collection files
+scripts/data_collection/data/raw/
+scripts/data_collection/data/processed/
+scripts/data_collection/data/progress.json

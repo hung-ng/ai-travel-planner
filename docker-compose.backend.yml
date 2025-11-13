@@ -21,7 +21,7 @@ services:
 
   # ChromaDB (Vector Database)
   chromadb:
-    image: chromadb/chroma:latest
+    image: chromadb/chroma:0.5.0
     container_name: travel_planner_chromadb
     ports:
       - "8001:8000"
@@ -29,6 +29,7 @@ services:
       - chroma_data:/chroma/chroma
     environment:
       - IS_PERSISTENT=TRUE
+      - ANONYMIZED_TELEMETRY=FALSE
 
   # Redis (Optional - for caching)
   redis:
