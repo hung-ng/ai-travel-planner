@@ -10,7 +10,7 @@ router = APIRouter()
 @router.post("/", response_model=TripResponse)
 async def create_trip(trip: TripCreate, db: Session = Depends(get_db)):
     """Create a new trip"""
-    db_trip = Trip(**trip.dict())
+    db_trip = Trip(**trip.model_dump())
     db.add(db_trip)
     db.commit()
     db.refresh(db_trip)
@@ -36,10 +36,10 @@ async def update_trip(trip_id: int, trip: TripCreate, db: Session = Depends(get_
     db_trip = db.query(Trip).filter(Trip.id == trip_id).first()
     if not db_trip:
         raise HTTPException(status_code=404, detail="Trip not found")
-    
-    for key, value in trip.dict().items():
+
+    for key, value in trip.model_dump().items():
         setattr(db_trip, key, value)
-    
+
     db.commit()
     db.refresh(db_trip)
     return db_trip

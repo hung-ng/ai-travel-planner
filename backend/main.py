@@ -4,7 +4,7 @@ from app.database import engine, Base
 from app.api import chat, trips
 
 # Create tables
-Base.metadata.create_all(bind=engine)
+# Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="AI Travel Planner API", version="1.0.0")
 
