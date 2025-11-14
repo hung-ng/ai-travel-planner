@@ -24,9 +24,10 @@ export default function RootLayout({
     <html lang='en'>
       <body className={inter.className}>
         <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-            <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              🌍 AI Travel Planner
+          <div className="px-8 py-3 flex items-center justify-between">
+            <Link href="/" className="text-2xl font-bold flex items-center gap-2">
+              <span>🌍</span>
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">AI Travel Planner</span>
             </Link>
             <UserMenu />
           </div>

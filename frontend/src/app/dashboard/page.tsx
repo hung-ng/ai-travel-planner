@@ -5,10 +5,10 @@ import Link from 'next/link';
 import { Trip } from '@/types';
 import { api } from '@/lib/api';
 
-// You'll need to add this to your @/lib/api.ts:
+//  need to add this to your @/lib/api.ts:
 /*
 export const api = {
-  // ... your existing functions
+  // ...  existing functions
   
   async getTrips(userId: number): Promise<Trip[]> {
     const response = await fetch(`${API_BASE_URL}/trips?user_id=${userId}`);
@@ -55,8 +55,7 @@ export default function TripDashboard() {
 
   const loadTrips = async () => {
     try {
-      // Mock data - Uncomment this if backend is not running
-      /*
+      // mock chnage this
       const mockTrips: Trip[] = [
         {
           id: 1,
@@ -94,13 +93,26 @@ export default function TripDashboard() {
           created_at: '2023-09-10T14:00:00Z',
           updated_at: '2023-11-16T08:45:00Z',
         },
+        {
+          id: 4,
+          user_id: 1,
+          destination: 'Ho Chi Minh City, Vietnam',
+          start_date: '2023-08-12',
+          end_date: '2023-08-20',
+          budget: 1800,
+          status: 'completed',
+          itinerary: { days: 8, activities: 24 },
+          created_at: '2023-06-20T10:00:00Z',
+          updated_at: '2023-08-21T09:30:00Z',
+        },
       ];
       setTrips(mockTrips);
-      */
+      
 
       // real
-      const data = await api.getAllTrips(); 
+       /* const data = await api.getAllTrips(); 
       setTrips(data);
+       */
 
       setLoading(false);
     } catch (err) {
@@ -178,64 +190,63 @@ export default function TripDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
+          <Link href="/" className="text-blue-500 hover:text-blue-600 text-base font-bold mb-2 inline-block">
+            ← Back to Home
+          </Link>
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900">My Trips</h1>
-              <p className="text-gray-600 mt-1">Manage and view all your travel plans</p>
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">My Trips</h1>
             </div>
             <Link 
               href="/chat"
-              className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl flex items-center gap-2"
+              className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-base hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl flex items-center gap-2"
             >
               <span>+</span> New Trip
             </Link>
           </div>
 
-          <Link href="/" className="text-blue-500 hover:text-blue-600 text-sm">
-            ← Back to Home
-          </Link>
         </div>
 
         {/* Stats  */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+          <div className="bg-white p-4 rounded-xl shadow-md border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Total Trips</p>
+                <p className="text-lg text-gray-600">Total Trips</p>
                 <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
               </div>
               <div className="text-4xl">🌍</div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+          <div className="bg-white p-4 rounded-xl shadow-md border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Planning</p>
+                <p className="text-lg text-gray-600">Planning</p>
                 <p className="text-3xl font-bold text-blue-600">{stats.planning}</p>
               </div>
               <div className="text-4xl">📝</div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+          <div className="bg-white p-4 rounded-xl shadow-md border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Booked</p>
+                <p className="text-lg text-gray-600">Booked</p>
                 <p className="text-3xl font-bold text-green-600">{stats.booked}</p>
               </div>
               <div className="text-4xl">✅</div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+          <div className="bg-white p-4 rounded-xl shadow-md border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Completed</p>
+                <p className="text-lg text-gray-600">Completed</p>
                 <p className="text-3xl font-bold text-purple-600">{stats.completed}</p>
               </div>
               <div className="text-4xl">🎉</div>
@@ -243,22 +254,24 @@ export default function TripDashboard() {
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="bg-white p-4 rounded-xl shadow-md border border-gray-200 mb-6">
-          <div className="flex flex-col md:flex-row gap-4">
+        {/* Filters and Trips Section */}
+        <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
+          {/* Filters */}
+          <div className="mb-6">
+            <div className="flex flex-col md:flex-row gap-4">
             {/* Search */}
-            <div className="flex-1">
+            <div className="md:w-[420px]">
               <input
                 type="text"
                 placeholder="Search destinations..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
             {/* Status Filter */}
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex gap-2 flex-wrap flex-1">
               {['all', 'planning', 'booked', 'completed'].map(status => (
                 <button
                   key={status}
@@ -278,7 +291,7 @@ export default function TripDashboard() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="md:w-56 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="date">Sort by Date</option>
               <option value="budget">Sort by Budget</option>
@@ -314,10 +327,10 @@ export default function TripDashboard() {
                   className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow cursor-pointer group"
                 >
                   {/* Card Header with gradient */}
-                  <div className="h-32 bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 relative">
+                  <div className="h-48 bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 relative">
                     <div className="absolute top-3 right-3">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${status.color}`}>
-                        {status.icon} {status.label}
+                      <span className={`px-3 py-1 rounded-full text-sm font-semibold border ${status.color}`}>
+                        {status.label}
                       </span>
                     </div>
                     <div className="absolute bottom-3 left-4 text-white">
@@ -326,27 +339,27 @@ export default function TripDashboard() {
                   </div>
 
                   {/* Card Content */}
-                  <div className="p-5">
-                    <div className="space-y-3">
-                      <div className="flex items-center text-sm text-gray-600">
+                  <div className="p-8 pl-6 pb-6">
+                    <div className="space-y-2">
+                      <div className="flex items-center text-base text-gray-600">
                         <span className="mr-2">📅</span>
                         <span>{formatDate(trip.start_date)} - {formatDate(trip.end_date)}</span>
                       </div>
 
-                      <div className="flex items-center text-sm text-gray-600">
+                      <div className="flex items-center text-base text-gray-600">
                         <span className="mr-2">⏱️</span>
                         <span>{duration} days</span>
                       </div>
 
                       {trip.budget && (
-                        <div className="flex items-center text-sm text-gray-600">
+                        <div className="flex items-center text-base text-gray-600">
                           <span className="mr-2">💵</span>
                           <span>${trip.budget.toLocaleString()}</span>
                         </div>
                       )}
 
                       {trip.itinerary && (
-                        <div className="flex items-center text-sm text-gray-600">
+                        <div className="flex items-center text-base text-gray-600">
                           <span className="mr-2">📍</span>
                           <span>{trip.itinerary.activities} activities planned</span>
                         </div>
@@ -354,12 +367,18 @@ export default function TripDashboard() {
                     </div>
 
                     {/* Actions */}
-                    <div className="mt-5 pt-4 border-t border-gray-200">
+                    <div className="mt-8 pt-6 border-t border-gray-200 space-y-3">
+                      <Link
+                        href={`/trip?id=${trip.id}`}
+                        className="block w-full bg-white border-2 border-blue-500 text-blue-500 px-5 py-3 rounded-lg text-center text-base font-medium hover:bg-blue-50 transition-colors"
+                      >
+                        View Details
+                      </Link>
                       <Link
                         href={`/chat?tripId=${trip.id}`}
-                        className="block w-full bg-blue-500 text-white px-4 py-2 rounded-lg text-center text-sm font-medium hover:bg-blue-600 transition-colors"
+                        className="block w-full bg-blue-500 text-white px-5 py-3 rounded-lg text-center text-base font-medium hover:bg-blue-600 transition-colors"
                       >
-                        Continue Planning
+                        Continue Planning →
                       </Link>
                     </div>
                   </div>
@@ -368,6 +387,7 @@ export default function TripDashboard() {
             })}
           </div>
         )}
+        </div>
       </div>
     </div>
   );

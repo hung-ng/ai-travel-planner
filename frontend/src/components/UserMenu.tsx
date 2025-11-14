@@ -13,8 +13,8 @@ interface User {
 // user need to be replace with real auth
 const currentUser: User = {
   id: 1,
-  name: 'John Traveler',
-  email: 'john@example.com',
+  name: 'Jane Doe',
+  email: 'jane@example.com',
   avatar: '👤',
 };
 
@@ -45,17 +45,17 @@ export default function UserMenu() {
       {/* Avatar Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+        className="flex items-center gap-3 px-5 py-3 rounded-lg hover:bg-gray-100 transition-colors"
       >
-        <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-xl">
+        <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-2xl">
           {user.avatar}
         </div>
         <div className="hidden md:block text-left">
-          <p className="text-sm font-semibold text-gray-900">{user.name}</p>
-          <p className="text-xs text-gray-500">View Profile</p>
+          <p className="text-lg font-semibold text-gray-900">{user.name}</p>
+          <p className="text-base text-gray-500">View Profile</p>
         </div>
         <svg 
-          className={`w-4 h-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           fill="none" 
           stroke="currentColor" 
           viewBox="0 0 24 24"

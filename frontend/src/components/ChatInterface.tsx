@@ -12,7 +12,7 @@ interface ChatInterfaceProps {
 }
 
 const quickPrompts = [
-  { icon: '🏖️', text: 'Beach vacation for 2 weeks', category: 'Popular' },
+  { icon: '🏖️', text: 'Beach vacation', category: 'Popular' },
   { icon: '🏔️', text: 'Mountain hiking adventure', category: 'Popular' },
   { icon: '🌆', text: 'City tour with culture & food', category: 'Popular' },
   { icon: '💰', text: 'Budget-friendly trip under $1000', category: 'Budget' },
@@ -135,51 +135,54 @@ export default function ChatInterface({ tripId, userId = 1 }: ChatInterfaceProps
     : quickPrompts.filter(p => p.category === selectedCategory);
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
-      <div className="flex flex-col h-[700px] bg-white rounded-lg shadow-lg border border-gray-200">
+    <div className="w-full p-4">
+      <div className="flex flex-col h-[900px] bg-white rounded-lg shadow-lg border border-gray-200">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-t-lg">
-          <h2 className="text-xl font-semibold">AI Travel Planner</h2>
-          <p className="text-sm text-blue-100">Plan your perfect trip with AI</p>
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-8 rounded-t-lg">
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {messages.map((msg, idx) => {
-            const isUser = msg.role === 'user';
-            return (
-              <div key={idx} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[75%] rounded-2xl px-4 py-3 ${
-                  isUser 
-                    ? 'bg-blue-500 text-white rounded-br-none'
-                    : 'bg-gray-200 text-gray-900 rounded-bl-none'
-                }`}>
-                  <p className="whitespace-pre-wrap break-words">{msg.content}</p>
-                  <p className={`text-xs mt-1 ${isUser ? 'text-blue-100' : 'text-gray-500'}`}>
-                    {msg.timestamp?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </p>
+        <div className="flex-1 overflow-y-auto p-4 flex flex-col">
+          <div className="space-y-4">
+            {messages.map((msg, idx) => {
+              const isUser = msg.role === 'user';
+              return (
+                <div key={idx} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[75%] rounded-2xl px-4 py-3 ${
+                    isUser 
+                      ? 'bg-blue-500 text-white rounded-br-none'
+                      : 'bg-gray-200 text-gray-900 rounded-bl-none'
+                  }`}>
+                    <p className="whitespace-pre-wrap break-words">{msg.content}</p>
+                    <p className={`text-xs mt-1 ${isUser ? 'text-blue-100' : 'text-gray-500'}`}>
+                      {msg.timestamp?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+            
+            {loading && (
+              <div className="flex justify-start">
+                <div className="bg-gray-200 rounded-2xl px-4 py-3 rounded-bl-none">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  </div>
                 </div>
               </div>
-            );
-          })}
-          
-          {loading && (
-            <div className="flex justify-start">
-              <div className="bg-gray-200 rounded-2xl px-4 py-3 rounded-bl-none">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                </div>
-              </div>
-            </div>
-          )}
+            )}
+          </div>
+
+          {/* Spacer to push prompts to bottom */}
+          <div className="flex-1"></div>
 
           {/* Prompts */}
           {showQuickPrompts && messages.length <= 2 && (
-            <div className="space-y-3">
+            <div className="space-y-3 mt-4">
               <div className="text-center">
-                <p className="text-sm text-gray-500 mb-3">Quick start with these suggestions:</p>
+                <p className="text-base text-gray-600 mb-4 font-medium">Quick start with these suggestions:</p>
                 
                 {/* Category */}
                 <div className="flex flex-wrap gap-2 justify-center mb-4">
@@ -187,19 +190,19 @@ export default function ChatInterface({ tripId, userId = 1 }: ChatInterfaceProps
                     <button
                       key={cat}
                       onClick={() => setSelectedCategory(cat)}
-                      className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                         selectedCategory === cat
                           ? 'bg-blue-500 text-white'
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
                     >
-                      {cat}
+                      {cat === 'all' ? 'All' : cat}
                     </button>
                   ))}
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 {filteredPrompts.map((prompt, idx) => (
                   <button
                     key={idx}
@@ -211,11 +214,7 @@ export default function ChatInterface({ tripId, userId = 1 }: ChatInterfaceProps
                       <span className="text-sm font-medium text-gray-700 group-hover:text-blue-700">
                         {prompt.text}
                       </span>
-                      <span className="block text-xs text-gray-500">{prompt.category}</span>
                     </div>
-                    <svg className="w-4 h-4 text-gray-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
                   </button>
                 ))}
               </div>
@@ -243,23 +242,22 @@ export default function ChatInterface({ tripId, userId = 1 }: ChatInterfaceProps
 
         {/* Input */}
         <div className="border-t border-gray-200 p-4 bg-gray-50 rounded-b-lg">
-          <div className="flex gap-2 mb-2">
+          <div className="flex gap-2 mb-2 items-stretch">
             <textarea
               ref={textareaRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type your message... (Shift+Enter for new line)"
-              className="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              rows={2}
+              className="flex-[3] p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none h-[60px]"
               disabled={loading}
             />
             <button
               onClick={() => handleSend()}
               disabled={loading || !input.trim()}
-              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium self-end"
+              className="flex-[0.5] bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium flex items-center justify-center text-xl"
             >
-              {loading ? '...' : 'Send'}
+              {loading ? '...' : '➤'}
             </button>
           </div>
 
@@ -268,17 +266,14 @@ export default function ChatInterface({ tripId, userId = 1 }: ChatInterfaceProps
             <div className="flex gap-2">
               <button
                 onClick={() => setShowQuickPrompts(!showQuickPrompts)}
-                className="px-3 py-1 text-xs bg-white border border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 text-sm bg-white border border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 transition-colors"
               >
                 ✨ Quick prompts
               </button>
-              <button className="px-3 py-1 text-xs bg-white border border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 transition-colors">
-                🎤 Voice (soon)
+              <button className="px-4 py-2 text-sm bg-white border border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 transition-colors">
+                🎤 Voice (coming soon)
               </button>
             </div>
-            <p className="text-xs text-gray-500">
-              Press Enter to send • Shift+Enter for new line
-            </p>
           </div>
         </div>
       </div>

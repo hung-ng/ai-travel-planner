@@ -1,4 +1,5 @@
 'use client';
+import ExportShare from '@/components/ShareExport';
 
 import { useState, useEffect } from 'react';
 import ChatInterface from '@/components/ChatInterface';
@@ -16,6 +17,12 @@ export default function ChatPage() {
 
   const initializeTrip = async () => {
     try {
+      // Use mock trip ID for development without backend
+      setTripId(1);
+      setLoading(false);
+      
+      // Uncomment below when backend is ready
+      /*
       const trip = await api.createTrip({
         user_id: 1,
         destination: 'Planning',
@@ -26,6 +33,7 @@ export default function ChatPage() {
 
       setTripId(trip.id);
       setLoading(false);
+      */
     } catch (err) {
       console.error('Failed to create trip:', err);
       setError('Failed to connect. Make sure server is running.');
@@ -72,33 +80,53 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen p-4 md:p-8 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+      <div className="max-w-6xl mx-auto">
 
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <Link
-              href="/"
-              className="text-blue-500 hover:text-blue-600 text-sm mb-2 inline-block"
-            >
-              Back to Home
-            </Link>
-            <h1 className="text-3xl font-bold">Plan Your Trip</h1>
-            <p className="text-gray-600">Trip ID: {tripId}</p>
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="text-blue-500 hover:text-blue-600 text-base mb-2 inline-block font-bold"
+          >
+            ← Back to Home
+          </Link>
+          <div className="flex items-center justify-between">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Plan Your Trip</h1>
+            {tripId && (
+              <ExportShare 
+                trip={{
+                  id: tripId,
+                  user_id: 1,
+                  destination: 'Your Destination',
+                  start_date: new Date().toISOString(),
+                  end_date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+                  budget: null,
+                  status: 'planning',
+                  itinerary: null,
+                  created_at: new Date().toISOString(),
+                  updated_at: new Date().toISOString(),
+                }}
+                messages={[]}
+              />
+            )}
           </div>
         </div>
 
-        {tripId && <ChatInterface tripId={tripId} userId={1} />}
-
-        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h3 className="font-semibold text-blue-900 mb-2">Tips for better results:</h3>
-          <ul className="text-sm text-blue-800 space-y-1">
+        <div className="mb-6 bg-blue-100 border border-blue-200 rounded-lg p-4">
+          <h3 className="font-semibold text-black mb-2">Tips for better results:</h3>
+          <ul className="text-sm text-black space-y-1">
             <li>• Tell me your destination and travel dates</li>
             <li>• Share your budget and interests</li>
             <li>• What is your preferred travel pace (relaxed, moderate, fast-paced)?</li>
             <li>• Any specific recommendations (restaurants, museums, hidden gems)?</li>
           </ul>
         </div>
+
+        {tripId && (
+  <>
+    <ChatInterface tripId={tripId} userId={1} />
+  </>
+)}
       </div>
     </div>
   );
