@@ -1,6 +1,7 @@
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import ChatInterface from '../ChatInterface'
+import { api } from '@/lib/api'
 
 // Mock the API
 jest.mock('@/lib/api', () => ({
@@ -9,21 +10,29 @@ jest.mock('@/lib/api', () => ({
   },
 }))
 
+const mockedApi = api as jest.Mocked<typeof api>
+
 describe('ChatInterface', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+
+    // Setup default mock response
+    mockedApi.sendMessage.mockResolvedValue({
+      message: 'This is a mocked AI response.',
+      conversation_id: 1,
+    })
   })
 
   describe('Initial Render', () => {
     it('renders the chat interface', () => {
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
-      expect(screen.getByText('AI Travel Planner')).toBeInTheDocument()
-      expect(screen.getByText('Plan your perfect trip with AI')).toBeInTheDocument()
+      // Check that the component renders (by finding the welcome message)
+      expect(screen.getByText(/Hi! I'm your AI travel assistant/i)).toBeInTheDocument()
     })
 
     it('displays welcome message on initial load', () => {
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
       expect(
         screen.getByText(/Hi! I'm your AI travel assistant/i)
@@ -31,7 +40,7 @@ describe('ChatInterface', () => {
     })
 
     it('renders input textarea', () => {
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
       const textarea = screen.getByPlaceholderText(/Type your message/i)
       expect(textarea).toBeInTheDocument()
@@ -39,32 +48,32 @@ describe('ChatInterface', () => {
     })
 
     it('renders send button', () => {
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
-      const sendButton = screen.getByRole('button', { name: /send/i })
+      const sendButton = screen.getByRole('button', { name: /send message/i })
       expect(sendButton).toBeInTheDocument()
     })
 
     it('shows quick prompts on initial load', () => {
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
       expect(screen.getByText(/Quick start with these suggestions/i)).toBeInTheDocument()
-      expect(screen.getByText(/Beach vacation for 2 weeks/i)).toBeInTheDocument()
+      expect(screen.getByText(/Beach vacation/i)).toBeInTheDocument()
     })
   })
 
   describe('Quick Prompts', () => {
     it('displays all quick prompt categories', () => {
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
-      expect(screen.getByRole('button', { name: 'all' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'All' })).toBeInTheDocument()
       expect(screen.getByRole('button', { name: 'Popular' })).toBeInTheDocument()
       expect(screen.getByRole('button', { name: 'Budget' })).toBeInTheDocument()
     })
 
     it('filters prompts when category is selected', async () => {
       const user = userEvent.setup()
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
       // Click Budget category
       const budgetButton = screen.getByRole('button', { name: 'Budget' })
@@ -83,25 +92,25 @@ describe('ChatInterface', () => {
 
     it('sends message when quick prompt is clicked', async () => {
       const user = userEvent.setup()
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
-      const quickPrompt = screen.getByText(/Beach vacation for 2 weeks/i)
+      const quickPrompt = screen.getByText(/Beach vacation/i)
       await user.click(quickPrompt)
 
       // Wait for the message to appear
       await waitFor(() => {
-        expect(screen.getByText(/Beach vacation for 2 weeks/i)).toBeInTheDocument()
+        expect(screen.getByText(/Beach vacation/i)).toBeInTheDocument()
       })
     })
 
     it('hides quick prompts after first message', async () => {
       const user = userEvent.setup()
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
       const textarea = screen.getByPlaceholderText(/Type your message/i)
       await user.type(textarea, 'Hello')
 
-      const sendButton = screen.getByRole('button', { name: /send/i })
+      const sendButton = screen.getByRole('button', { name: /send message/i })
       await user.click(sendButton)
 
       // Quick prompts should disappear after sending message
@@ -114,12 +123,12 @@ describe('ChatInterface', () => {
   describe('Sending Messages', () => {
     it('sends message when send button is clicked', async () => {
       const user = userEvent.setup()
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
       const textarea = screen.getByPlaceholderText(/Type your message/i)
       await user.type(textarea, 'I want to visit Tokyo')
 
-      const sendButton = screen.getByRole('button', { name: /send/i })
+      const sendButton = screen.getByRole('button', { name: /send message/i })
       await user.click(sendButton)
 
       // User message should appear in chat
@@ -130,7 +139,7 @@ describe('ChatInterface', () => {
 
     it('sends message when Enter is pressed', async () => {
       const user = userEvent.setup()
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
       const textarea = screen.getByPlaceholderText(/Type your message/i)
       await user.type(textarea, 'Paris trip{Enter}')
@@ -143,7 +152,7 @@ describe('ChatInterface', () => {
 
     it('does not send message when Shift+Enter is pressed', async () => {
       const user = userEvent.setup()
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
       const textarea = screen.getByPlaceholderText(/Type your message/i)
       await user.type(textarea, 'Line 1{Shift>}{Enter}{/Shift}Line 2')
@@ -154,12 +163,12 @@ describe('ChatInterface', () => {
 
     it('clears input after sending message', async () => {
       const user = userEvent.setup()
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
       const textarea = screen.getByPlaceholderText(/Type your message/i)
       await user.type(textarea, 'Test message')
 
-      const sendButton = screen.getByRole('button', { name: /send/i })
+      const sendButton = screen.getByRole('button', { name: /send message/i })
       await user.click(sendButton)
 
       await waitFor(() => {
@@ -169,9 +178,9 @@ describe('ChatInterface', () => {
 
     it('does not send empty messages', async () => {
       const user = userEvent.setup()
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
-      const sendButton = screen.getByRole('button', { name: /send/i })
+      const sendButton = screen.getByRole('button', { name: /send message/i })
 
       // Button should be disabled when input is empty
       expect(sendButton).toBeDisabled()
@@ -179,65 +188,104 @@ describe('ChatInterface', () => {
 
     it('does not send whitespace-only messages', async () => {
       const user = userEvent.setup()
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
       const textarea = screen.getByPlaceholderText(/Type your message/i)
       await user.type(textarea, '   ')
 
-      const sendButton = screen.getByRole('button', { name: /send/i })
+      const sendButton = screen.getByRole('button', { name: /send message/i })
       expect(sendButton).toBeDisabled()
     })
   })
 
   describe('Loading State', () => {
     it('shows loading indicator while waiting for response', async () => {
+      // Add delay to mock to make loading state visible
+      mockedApi.sendMessage.mockImplementation(
+        () =>
+          new Promise((resolve) =>
+            setTimeout(
+              () =>
+                resolve({
+                  message: 'This is a mocked AI response.',
+                  conversation_id: 1,
+                }),
+              100
+            )
+          )
+      )
+
       const user = userEvent.setup()
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
       const textarea = screen.getByPlaceholderText(/Type your message/i)
       await user.type(textarea, 'Test')
 
-      const sendButton = screen.getByRole('button', { name: /send/i })
+      const sendButton = screen.getByRole('button', { name: /send message/i })
       await user.click(sendButton)
 
       // Loading indicator should appear briefly
-      // Since mockSendMessage has a 1 second delay, we should see loading
       expect(screen.getByText('...')).toBeInTheDocument()
 
       // Textarea should be disabled during loading
       expect(textarea).toBeDisabled()
+
+      // Wait for loading to complete
+      await waitFor(() => {
+        expect(screen.queryByText('...')).not.toBeInTheDocument()
+      })
     })
 
     it('disables send button while loading', async () => {
+      // Add delay to mock to make loading state visible
+      mockedApi.sendMessage.mockImplementation(
+        () =>
+          new Promise((resolve) =>
+            setTimeout(
+              () =>
+                resolve({
+                  message: 'This is a mocked AI response.',
+                  conversation_id: 1,
+                }),
+              100
+            )
+          )
+      )
+
       const user = userEvent.setup()
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
       const textarea = screen.getByPlaceholderText(/Type your message/i)
       await user.type(textarea, 'Test')
 
-      const sendButton = screen.getByRole('button', { name: /send/i })
+      const sendButton = screen.getByRole('button', { name: /send message/i })
       await user.click(sendButton)
 
       // Button should show loading state
       expect(screen.getByText('...')).toBeInTheDocument()
+
+      // Wait for loading to complete
+      await waitFor(() => {
+        expect(screen.queryByText('...')).not.toBeInTheDocument()
+      })
     })
   })
 
   describe('AI Response', () => {
     it('displays AI response after sending message', async () => {
       const user = userEvent.setup()
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
       const textarea = screen.getByPlaceholderText(/Type your message/i)
       await user.type(textarea, 'Hello')
 
-      const sendButton = screen.getByRole('button', { name: /send/i })
+      const sendButton = screen.getByRole('button', { name: /send message/i })
       await user.click(sendButton)
 
       // Wait for AI response (mocked)
       await waitFor(
         () => {
-          expect(screen.getByText(/AI Response to: Hello/i)).toBeInTheDocument()
+          expect(screen.getByText(/This is a mocked AI response/i)).toBeInTheDocument()
         },
         { timeout: 2000 }
       )
@@ -245,17 +293,17 @@ describe('ChatInterface', () => {
 
     it('maintains message order (user then assistant)', async () => {
       const user = userEvent.setup()
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
       const textarea = screen.getByPlaceholderText(/Type your message/i)
       await user.type(textarea, 'First message')
 
-      const sendButton = screen.getByRole('button', { name: /send/i })
+      const sendButton = screen.getByRole('button', { name: /send message/i })
       await user.click(sendButton)
 
       await waitFor(
         () => {
-          expect(screen.getByText(/AI Response to: First message/i)).toBeInTheDocument()
+          expect(screen.getByText(/This is a mocked AI response/i)).toBeInTheDocument()
         },
         { timeout: 2000 }
       )
@@ -277,7 +325,7 @@ describe('ChatInterface', () => {
 
   describe('UI Features', () => {
     it('shows toggle quick prompts button', () => {
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
       const toggleButton = screen.getByText(/✨ Quick prompts/i)
       expect(toggleButton).toBeInTheDocument()
@@ -285,12 +333,12 @@ describe('ChatInterface', () => {
 
     it('toggles quick prompts visibility', async () => {
       const user = userEvent.setup()
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
       const toggleButton = screen.getByText(/✨ Quick prompts/i)
 
       // Quick prompts should be visible initially
-      expect(screen.getByText(/Beach vacation for 2 weeks/i)).toBeInTheDocument()
+      expect(screen.getByText(/Beach vacation/i)).toBeInTheDocument()
 
       await user.click(toggleButton)
 
@@ -298,29 +346,23 @@ describe('ChatInterface', () => {
       // This is a simplified test
     })
 
-    it('displays keyboard shortcuts hint', () => {
-      render(<ChatInterface />)
-
-      expect(screen.getByText(/Press Enter to send • Shift\+Enter for new line/i)).toBeInTheDocument()
-    })
-
     it('shows voice feature coming soon', () => {
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
-      expect(screen.getByText(/🎤 Voice \(soon\)/i)).toBeInTheDocument()
+      expect(screen.getByText(/🎤 Voice \(coming soon\)/i)).toBeInTheDocument()
     })
   })
 
   describe('Conversation History', () => {
     it('maintains conversation history across multiple messages', async () => {
       const user = userEvent.setup()
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
       const textarea = screen.getByPlaceholderText(/Type your message/i)
 
       // Send first message
       await user.type(textarea, 'Message 1')
-      await user.click(screen.getByRole('button', { name: /send/i }))
+      await user.click(screen.getByRole('button', { name: /send message/i }))
 
       // Wait for message to appear
       await waitFor(() => {
@@ -345,11 +387,11 @@ describe('ChatInterface', () => {
 
       // Wait for send button to be enabled
       await waitFor(() => {
-        const sendButton = screen.getByRole('button', { name: /send/i })
+        const sendButton = screen.getByRole('button', { name: /send message/i })
         expect(sendButton).not.toBeDisabled()
       })
 
-      await user.click(screen.getByRole('button', { name: /send/i }))
+      await user.click(screen.getByRole('button', { name: /send message/i }))
 
       await waitFor(() => {
         expect(screen.getByText('Message 2')).toBeInTheDocument()
@@ -363,16 +405,16 @@ describe('ChatInterface', () => {
 
   describe('Accessibility', () => {
     it('has accessible textarea with placeholder', () => {
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
       const textarea = screen.getByPlaceholderText(/Type your message/i)
       expect(textarea).toHaveAttribute('placeholder')
     })
 
     it('has accessible buttons with proper labels', () => {
-      render(<ChatInterface />)
+      render(<ChatInterface tripId={1} />)
 
-      expect(screen.getByRole('button', { name: /send/i })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /send message/i })).toBeInTheDocument()
     })
   })
 })

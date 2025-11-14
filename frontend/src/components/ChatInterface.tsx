@@ -256,6 +256,7 @@ export default function ChatInterface({ tripId, userId = 1 }: ChatInterfaceProps
               onClick={() => handleSend()}
               disabled={loading || !input.trim()}
               className="flex-[0.5] bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium flex items-center justify-center text-xl"
+              aria-label="Send message"
             >
               {loading ? '...' : '➤'}
             </button>
@@ -267,10 +268,14 @@ export default function ChatInterface({ tripId, userId = 1 }: ChatInterfaceProps
               <button
                 onClick={() => setShowQuickPrompts(!showQuickPrompts)}
                 className="px-4 py-2 text-sm bg-white border border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 transition-colors"
+                aria-label="Toggle quick prompts"
               >
                 ✨ Quick prompts
               </button>
-              <button className="px-4 py-2 text-sm bg-white border border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 transition-colors">
+              <button
+                className="px-4 py-2 text-sm bg-white border border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 transition-colors"
+                aria-label="Voice input (coming soon)"
+              >
                 🎤 Voice (coming soon)
               </button>
             </div>
