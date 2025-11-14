@@ -36,3 +36,9 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: jest.fn(),
   })),
 })
+
+// Mock scrollIntoView (not available in jsdom)
+Element.prototype.scrollIntoView = jest.fn()
+
+// Note: MSW server setup is handled in integration test files
+// to avoid import issues with unit tests

@@ -57,9 +57,9 @@ describe('ChatInterface', () => {
     it('displays all quick prompt categories', () => {
       render(<ChatInterface />)
 
-      expect(screen.getByText('all')).toBeInTheDocument()
-      expect(screen.getByText('Popular')).toBeInTheDocument()
-      expect(screen.getByText('Budget')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'all' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Popular' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Budget' })).toBeInTheDocument()
     })
 
     it('filters prompts when category is selected', async () => {
@@ -322,12 +322,33 @@ describe('ChatInterface', () => {
       await user.type(textarea, 'Message 1')
       await user.click(screen.getByRole('button', { name: /send/i }))
 
+      // Wait for message to appear
       await waitFor(() => {
         expect(screen.getByText('Message 1')).toBeInTheDocument()
       })
 
+      // Wait for AI response and loading to complete
+      await waitFor(
+        () => {
+          expect(screen.getByText(/AI Response/i)).toBeInTheDocument()
+        },
+        { timeout: 2000 }
+      )
+
+      // Wait for textarea to be enabled again
+      await waitFor(() => {
+        expect(textarea).not.toBeDisabled()
+      })
+
       // Send second message
       await user.type(textarea, 'Message 2')
+
+      // Wait for send button to be enabled
+      await waitFor(() => {
+        const sendButton = screen.getByRole('button', { name: /send/i })
+        expect(sendButton).not.toBeDisabled()
+      })
+
       await user.click(screen.getByRole('button', { name: /send/i }))
 
       await waitFor(() => {
