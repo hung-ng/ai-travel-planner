@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Trip } from '@/types';
+import { api } from '@/lib/api';
 
 // You'll need to add this to your @/lib/api.ts:
 /*
@@ -54,10 +55,8 @@ export default function TripDashboard() {
 
   const loadTrips = async () => {
     try {
-      // TODO: Replace with actual API call when backend endpoint is ready
-      // const data = await api.getTrips(1); // userId = 1
-      
-      // Mock data for now - REMOVE THIS when you add the API endpoint
+      // Mock data - Uncomment this if backend is not running
+      /*
       const mockTrips: Trip[] = [
         {
           id: 1,
@@ -96,8 +95,13 @@ export default function TripDashboard() {
           updated_at: '2023-11-16T08:45:00Z',
         },
       ];
-      
       setTrips(mockTrips);
+      */
+
+      // real
+      const data = await api.getAllTrips(); 
+      setTrips(data);
+
       setLoading(false);
     } catch (err) {
       console.error('Failed to load trips:', err);
