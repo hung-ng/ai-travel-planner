@@ -227,10 +227,10 @@ Created with AI Travel Planner
     <div className="relative">
       <button
         onClick={() => setShowShareMenu(!showShareMenu)}
-        className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+        className="flex items-center gap-2 px-6 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
       >
-        <span>📤</span>
-        <span className="font-medium text-gray-700">Export & Share</span>
+        <span className="text-xl">📤</span>
+        <span className="font-medium text-gray-700 text-base">Export & Share</span>
       </button>
 
       {/* Dropdown Menu */}

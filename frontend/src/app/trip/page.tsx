@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Trip } from '@/types';
+import { api } from '@/lib/api';
 import ExportShare from '@/components/ShareExport';
 import BudgetBreakdown from '@/components/BudgetBreakdown';
 import ItineraryTimeline from '@/components/ItineraryTimeline';
@@ -31,32 +32,11 @@ export default function TripDetailsPage() {
 
   const loadTripDetails = async () => {
     try {
-      // const tripData = await api.getTrip(tripId);
-      // const chatHistory = await api.getTripMessages(tripId);
+      const tripData = await api.getTrip(parseInt(tripId));
+      setTrip(tripData);
       
-      // Mock
-      const mockTrip: Trip = {
-        id: parseInt(tripId),
-        user_id: 1,
-        destination: 'Paris, France',
-        start_date: '2024-06-15',
-        end_date: '2024-06-22',
-        budget: 3500,
-        status: 'planning',
-        itinerary: {
-          days: 7,
-          activities: [
-            { day: 1, title: 'Arrive in Paris', description: 'Check into hotel, evening walk along Seine', time: '14:00' },
-            { day: 1, title: 'Dinner at Le Comptoir', description: 'Traditional French cuisine', time: '19:00' },
-            { day: 2, title: 'Visit Eiffel Tower', description: 'Morning visit to avoid crowds', time: '09:00' },
-            { day: 2, title: 'Louvre Museum', description: 'Afternoon at the Louvre', time: '14:00' },
-            { day: 3, title: 'Montmartre Walking Tour', description: 'Explore Sacré-Cœur and artists square', time: '10:00' },
-          ]
-        },
-        created_at: '2024-01-15T10:00:00Z',
-        updated_at: '2024-01-20T15:30:00Z',
-      };
-
+      // TODO: Replace with real chat history when backend endpoint exists
+      // const chatHistory = await api.getTripMessages(tripId);
       const mockMessages: Message[] = [
         {
           role: 'user',
@@ -80,7 +60,6 @@ export default function TripDetailsPage() {
         },
       ];
 
-      setTrip(mockTrip);
       setMessages(mockMessages);
       setLoading(false);
     } catch (err) {

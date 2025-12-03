@@ -75,6 +75,17 @@ export default function Home() {
                                 className="block w-full text-center bg-gradient-to-r from-blue-500 to-blue-600 text-white px-10 py-5 rounded-xl font-semibold text-xl hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl">
                                 Start Planning Your Next Trip Now!
                             </Link>
+                            
+                            <div className="flex gap-4 pt-4">
+                                <Link href='/login' 
+                                    className="flex-1 text-center bg-white border-2 border-blue-500 text-blue-500 px-6 py-3 rounded-xl font-semibold text-lg hover:bg-blue-50 transition-all">
+                                    Log In
+                                </Link>
+                                <Link href='/signup' 
+                                    className="flex-1 text-center bg-white border-2 border-purple-500 text-purple-500 px-6 py-3 rounded-xl font-semibold text-lg hover:bg-purple-50 transition-all">
+                                    Sign Up
+                                </Link>
+                            </div>
                         </div>
                     </div>
 

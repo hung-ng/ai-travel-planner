@@ -5,19 +5,6 @@ import Link from 'next/link';
 import { Trip } from '@/types';
 import { api } from '@/lib/api';
 
-//  need to add this to your @/lib/api.ts:
-/*
-export const api = {
-  // ...  existing functions
-  
-  async getTrips(userId: number): Promise<Trip[]> {
-    const response = await fetch(`${API_BASE_URL}/trips?user_id=${userId}`);
-    if (!response.ok) throw new Error('Failed to fetch trips');
-    return response.json();
-  },
-};
-*/
-
 const statusConfig = {
   planning: { 
     color: 'bg-blue-100 text-blue-700 border-blue-200',
@@ -55,65 +42,8 @@ export default function TripDashboard() {
 
   const loadTrips = async () => {
     try {
-      // mock chnage this
-      const mockTrips: Trip[] = [
-        {
-          id: 1,
-          user_id: 1,
-          destination: 'Paris, France',
-          start_date: '2024-06-15',
-          end_date: '2024-06-22',
-          budget: 3500,
-          status: 'planning',
-          itinerary: { days: 7, activities: 21 },
-          created_at: '2024-01-15T10:00:00Z',
-          updated_at: '2024-01-20T15:30:00Z',
-        },
-        {
-          id: 2,
-          user_id: 1,
-          destination: 'Tokyo, Japan',
-          start_date: '2024-03-10',
-          end_date: '2024-03-20',
-          budget: 4200,
-          status: 'booked',
-          itinerary: { days: 10, activities: 35 },
-          created_at: '2023-12-01T09:00:00Z',
-          updated_at: '2024-01-05T11:20:00Z',
-        },
-        {
-          id: 3,
-          user_id: 1,
-          destination: 'Bali, Indonesia',
-          start_date: '2023-11-05',
-          end_date: '2023-11-15',
-          budget: 2800,
-          status: 'completed',
-          itinerary: { days: 10, activities: 28 },
-          created_at: '2023-09-10T14:00:00Z',
-          updated_at: '2023-11-16T08:45:00Z',
-        },
-        {
-          id: 4,
-          user_id: 1,
-          destination: 'Ho Chi Minh City, Vietnam',
-          start_date: '2023-08-12',
-          end_date: '2023-08-20',
-          budget: 1800,
-          status: 'completed',
-          itinerary: { days: 8, activities: 24 },
-          created_at: '2023-06-20T10:00:00Z',
-          updated_at: '2023-08-21T09:30:00Z',
-        },
-      ];
-      setTrips(mockTrips);
-      
-
-      // real
-       /* const data = await api.getAllTrips(); 
+      const data = await api.getAllTrips();
       setTrips(data);
-       */
-
       setLoading(false);
     } catch (err) {
       console.error('Failed to load trips:', err);

@@ -90,7 +90,6 @@ export default function ChatInterface({ tripId, userId = 1 }: ChatInterfaceProps
     setShowQuickPrompts(false);
 
     try {
-      //props
       const response = await api.sendMessage({
         message: textToSend,
         trip_id: tripId,
@@ -148,13 +147,13 @@ export default function ChatInterface({ tripId, userId = 1 }: ChatInterfaceProps
               const isUser = msg.role === 'user';
               return (
                 <div key={idx} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[75%] rounded-2xl px-4 py-3 ${
+                  <div className={`max-w-[75%] rounded-2xl px-5 py-4 ${
                     isUser 
                       ? 'bg-blue-500 text-white rounded-br-none'
                       : 'bg-gray-200 text-gray-900 rounded-bl-none'
                   }`}>
-                    <p className="whitespace-pre-wrap break-words">{msg.content}</p>
-                    <p className={`text-xs mt-1 ${isUser ? 'text-blue-100' : 'text-gray-500'}`}>
+                    <p className={`whitespace-pre-wrap break-words ${isUser ? 'text-base' : 'text-lg'}`}>{msg.content}</p>
+                    <p className={`text-sm mt-1 ${isUser ? 'text-blue-100' : 'text-gray-500'}`}>
                       {msg.timestamp?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
@@ -207,7 +206,7 @@ export default function ChatInterface({ tripId, userId = 1 }: ChatInterfaceProps
                   <button
                     key={idx}
                     onClick={() => handleQuickPrompt(prompt.text)}
-                    className="flex items-center gap-2 p-3 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg hover:from-blue-100 hover:to-purple-100 transition-all text-left group"
+                    className="flex items-center gap-2 p-3 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg hover:from-blue-100 hover:to-purple-100 transition-all text-left group min-h-[60px]"
                   >
                     <span className="text-2xl">{prompt.icon}</span>
                     <div className="flex-1">
@@ -249,13 +248,13 @@ export default function ChatInterface({ tripId, userId = 1 }: ChatInterfaceProps
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type your message... (Shift+Enter for new line)"
-              className="flex-[3] p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none h-[60px]"
+              className="flex-[3] p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none h-[60px] text-base"
               disabled={loading}
             />
             <button
               onClick={() => handleSend()}
               disabled={loading || !input.trim()}
-              className="flex-[0.5] bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium flex items-center justify-center text-xl"
+              className="flex-[0.5] bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium flex items-center justify-center text-2xl"
               aria-label="Send message"
             >
               {loading ? '...' : '➤'}
@@ -267,13 +266,13 @@ export default function ChatInterface({ tripId, userId = 1 }: ChatInterfaceProps
             <div className="flex gap-2">
               <button
                 onClick={() => setShowQuickPrompts(!showQuickPrompts)}
-                className="px-4 py-2 text-sm bg-white border border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 transition-colors"
+                className="px-5 py-2 text-base bg-white border border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 transition-colors"
                 aria-label="Toggle quick prompts"
               >
                 ✨ Quick prompts
               </button>
               <button
-                className="px-4 py-2 text-sm bg-white border border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 transition-colors"
+                className="px-5 py-2 text-base bg-white border border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 transition-colors"
                 aria-label="Voice input (coming soon)"
               >
                 🎤 Voice (coming soon)

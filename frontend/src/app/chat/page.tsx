@@ -17,12 +17,6 @@ export default function ChatPage() {
 
   const initializeTrip = async () => {
     try {
-      // Use mock trip ID for development without backend
-      setTripId(1);
-      setLoading(false);
-      
-      // Uncomment below when backend is ready
-      /*
       const trip = await api.createTrip({
         user_id: 1,
         destination: 'Planning',
@@ -33,7 +27,6 @@ export default function ChatPage() {
 
       setTripId(trip.id);
       setLoading(false);
-      */
     } catch (err) {
       console.error('Failed to create trip:', err);
       setError('Failed to connect. Make sure server is running.');
