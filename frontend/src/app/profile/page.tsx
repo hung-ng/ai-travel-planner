@@ -101,7 +101,7 @@ const mockUser: UserProfile = {
   id: 1,
   name: 'Jane Doe',
   email: 'jane@example.com',
-  avatar: '👤',
+  avatar: '',
   preferences: {
     travelStyle: ['Adventure', 'Cultural', 'Relaxation'],
     budgetRange: '$2000-$5000',
@@ -115,6 +115,10 @@ export default function UserProfile() {
   const [user, setUser] = useState<UserProfile>(mockUser);
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState<UserProfile>(user);
+
+  const getInitials = (name: string) => {
+    return name.split(' ').map(part => part[0]).join('').toUpperCase();
+  };
 
   const travelStyleOptions = ['Adventure', 'Luxury', 'Budget', 'Cultural', 'Relaxation', 'Family', 'Solo', 'Business'];
   const interestOptions = ['Food & Wine', 'Photography', 'History', 'Nature', 'Shopping', 'Nightlife', 'Art & Museums', 'Sports', 'Beach', 'Mountains'];
@@ -186,8 +190,8 @@ export default function UserProfile() {
             <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
               {/* Avatar */}
               <div className="text-center mb-8">
-                <div className="w-24 h-24 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-4xl mx-auto mb-4">
-                  {user.avatar}
+                <div className="w-24 h-24 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-3xl mx-auto mb-4">
+                  {getInitials(user.name)}
                 </div>
                 {isEditing ? (
                   <input
