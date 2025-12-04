@@ -148,15 +148,12 @@ export default function UserProfile() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/" className="text-blue-500 hover:text-blue-600 text-base mb-4 inline-block font-bold">
-            ← Back to Home
-          </Link>
           <div className="flex items-center justify-between">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">My Profile</h1>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-700 to-purple-700 bg-clip-text text-transparent">My Profile</h1>
             {isEditing ? (
               <div className="flex gap-2">
                 <button
@@ -215,7 +212,7 @@ export default function UserProfile() {
               </div>
 
               {/* Stats */}
-              <div className="space-y-4 pt-8 border-t border-gray-200 mb-8">
+              <div className="space-y-4 pt-6 border-t border-gray-200">
                 <div className="flex items-center justify-between">
                   <span className="text-base text-gray-600">Total Trips</span>
                   <span className="font-semibold text-base text-gray-900">{user.stats.totalTrips}</span>
@@ -231,7 +228,7 @@ export default function UserProfile() {
               </div>
 
               {/* Actions */}
-              <div className="mt-6">
+              <div className="mt-8">
                 <Link
                   href="/dashboard"
                   className="block w-full text-center bg-gray-100 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-200 transition-colors text-lg"
@@ -318,16 +315,12 @@ export default function UserProfile() {
         </div>
 
         {/* AI Memory - Full Width */}
-        <div className="mt-6 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-xl p-4">
+        <div className="mt-6">
           <div className="flex items-center gap-3">
             <span className="text-2xl">🤖</span>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-1">AI Memory</h3>
-              <p className="text-base text-gray-700">
-                Your travel AI assistant remembers your preferences and past trips. 
-                The more you interact, the better recommendations you'll receive!
-              </p>
-            </div>
+            <p className="text-base text-gray-700">
+              Your travel AI assistant remembers your preferences and past trips!
+            </p>
           </div>
         </div>
       </div>

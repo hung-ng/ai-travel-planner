@@ -257,7 +257,6 @@ Created with AI Travel Planner
                 }}
                 className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-100 rounded-lg transition-colors"
               >
-                <span className="text-xl">📄</span>
                 <div>
                   <div className="font-medium text-gray-900">Export as PDF</div>
                   <div className="text-xs text-gray-500">Print-friendly format</div>
@@ -271,7 +270,6 @@ Created with AI Travel Planner
                 }}
                 className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-100 rounded-lg transition-colors"
               >
-                <span className="text-xl">📝</span>
                 <div>
                   <div className="font-medium text-gray-900">Export as Text</div>
                   <div className="text-xs text-gray-500">Plain text file</div>
@@ -285,7 +283,6 @@ Created with AI Travel Planner
                 }}
                 className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-100 rounded-lg transition-colors"
               >
-                <span className="text-xl">💾</span>
                 <div>
                   <div className="font-medium text-gray-900">Export as JSON</div>
                   <div className="text-xs text-gray-500">Raw data format</div>

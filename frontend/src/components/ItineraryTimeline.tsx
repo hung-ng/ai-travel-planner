@@ -69,24 +69,6 @@ export default function ItineraryTimeline({
 
   return (
     <div className="space-y-6">
-      {/* Summary  */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-200">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">Trip Overview</h3>
-            <p className="text-sm text-gray-600">
-              {sortedDays.length} days • {activities.length} activities
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="text-sm text-gray-600">Estimated Total</p>
-            <p className="text-2xl font-bold text-blue-600">
-              ${totalCost.toLocaleString()}
-            </p>
-          </div>
-        </div>
-      </div>
-
       {/* Day Selector */}
       <div className="flex gap-2 overflow-x-auto pb-2">
         <button
@@ -125,7 +107,7 @@ export default function ItineraryTimeline({
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="text-xl font-bold">Day {day}</h4>
-                    <p className="text-sm text-blue-100">{getDateForDay(day)}</p>
+                    <p className="text-base text-blue-100">{getDateForDay(day)}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-sm text-blue-100">Daily Cost</p>
@@ -141,11 +123,11 @@ export default function ItineraryTimeline({
                   .map((activity, idx) => {
                     const config = categoryConfig[activity.category];
                     return (
-                      <div key={activity.id} className="flex gap-4">
+                      <div key={activity.id} className="flex gap-6">
                         {/* Time */}
                         <div className="flex flex-col items-center">
-                          <div className="w-16 text-center">
-                            <p className="text-sm font-semibold text-gray-900">{activity.time}</p>
+                          <div className="w-20 text-center">
+                            <p className="text-base font-semibold text-gray-900">{activity.time}</p>
                             {activity.duration && (
                               <p className="text-xs text-gray-500">{activity.duration}</p>
                             )}
@@ -160,11 +142,16 @@ export default function ItineraryTimeline({
                           <div className="bg-gray-50 rounded-lg p-4 hover:shadow-md transition-shadow border border-gray-200">
                             <div className="flex items-start justify-between gap-3">
                               <div className="flex-1">
-                                <div className="flex items-center gap-2 mb-2">
-                                  <span className="text-2xl">{config.icon}</span>
-                                  <h5 className="font-semibold text-gray-900">{activity.title}</h5>
+                                <div className="flex items-center justify-between gap-2 mb-1">
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-2xl">{config.icon}</span>
+                                    <h5 className="text-base font-semibold text-gray-900">{activity.title}</h5>
+                                  </div>
+                                  <span className={`px-2 py-1 rounded-full border text-sm ${config.color}`}>
+                                    {activity.category}
+                                  </span>
                                 </div>
-                                <p className="text-sm text-gray-600 mb-2">{activity.description}</p>
+                                <p className="text-base text-gray-600 mb-1">{activity.description}</p>
                                 
                                 <div className="flex flex-wrap gap-3 text-xs text-gray-500">
                                   {activity.location && (
@@ -177,9 +164,6 @@ export default function ItineraryTimeline({
                                       💵 ${activity.cost}
                                     </span>
                                   )}
-                                  <span className={`px-2 py-1 rounded-full border ${config.color}`}>
-                                    {activity.category}
-                                  </span>
                                 </div>
                               </div>
                             </div>

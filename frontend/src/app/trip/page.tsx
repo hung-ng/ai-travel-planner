@@ -32,8 +32,34 @@ export default function TripDetailsPage() {
 
   const loadTripDetails = async () => {
     try {
-      const tripData = await api.getTrip(parseInt(tripId));
-      setTrip(tripData);
+      // Mock trip data for demo (replace with api.getTrip() when backend is ready)
+      const mockTrip: Trip = {
+        id: parseInt(tripId),
+        user_id: 1,
+        destination: 'Paris, France',
+        start_date: '2024-06-15',
+        end_date: '2024-06-22',
+        budget: 3500,
+        status: 'planning',
+        itinerary: { 
+          days: 7, 
+          activities: [
+            { day: 1, time: '9:00 AM', title: 'Eiffel Tower Visit', description: 'Start your trip at the iconic Eiffel Tower' },
+            { day: 1, time: '2:00 PM', title: 'Louvre Museum', description: 'Explore world-famous art and history' },
+            { day: 2, time: '10:00 AM', title: 'Notre-Dame Cathedral', description: 'Visit the historic cathedral' },
+            { day: 2, time: '3:00 PM', title: 'Seine River Cruise', description: 'Scenic boat tour along the Seine' },
+            { day: 3, time: '9:00 AM', title: 'Versailles Palace', description: 'Day trip to the magnificent palace' },
+            { day: 4, time: '11:00 AM', title: 'Montmartre & Sacré-Cœur', description: 'Explore the artistic neighborhood' },
+          ]
+        },
+        created_at: '2024-01-15T10:00:00Z',
+        updated_at: '2024-01-20T15:30:00Z',
+      };
+      setTrip(mockTrip);
+      
+      // Uncomment when backend is ready:
+      // const tripData = await api.getTrip(parseInt(tripId));
+      // setTrip(tripData);
       
       // TODO: Replace with real chat history when backend endpoint exists
       // const chatHistory = await api.getTripMessages(tripId);
@@ -85,7 +111,7 @@ export default function TripDetailsPage() {
   };
 
   const statusColors = {
-    planning: 'bg-blue-100 text-blue-700 border-blue-200',
+    planning: 'bg-blue-100 text-blue-700 border-blue-300',
     booked: 'bg-green-100 text-green-700 border-green-200',
     completed: 'bg-gray-100 text-gray-700 border-gray-200',
     cancelled: 'bg-red-100 text-red-700 border-red-200',
@@ -121,32 +147,21 @@ export default function TripDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <Link href="/dashboard" className="text-blue-500 hover:text-blue-600 text-sm mb-2 inline-block">
+          <Link href="/dashboard" className="text-blue-700 hover:text-blue-800 text-base mb-4 inline-block font-bold">
             ← Back to My Trips
           </Link>
           
           <div className="flex items-start justify-between gap-4">
             <div>
               <h1 className="text-4xl font-bold text-gray-900 mb-2">{trip.destination}</h1>
-              <div className="flex items-center gap-3 text-gray-600">
-                <span>📅 {formatDate(trip.start_date)} - {formatDate(trip.end_date)}</span>
-                <span>•</span>
-                <span>⏱️ {getDuration(trip.start_date, trip.end_date)} days</span>
-                {trip.budget && (
-                  <>
-                    <span>•</span>
-                    <span>💰 ${trip.budget.toLocaleString()}</span>
-                  </>
-                )}
-              </div>
             </div>
             
             <div className="flex gap-2">
-              <span className={`px-4 py-2 rounded-full text-sm font-semibold border ${statusColors[trip.status as keyof typeof statusColors]}`}>
+              <span className={`px-4 py-2 rounded-full text-base font-semibold border ${statusColors[trip.status as keyof typeof statusColors]}`}>
                 {trip.status.charAt(0).toUpperCase() + trip.status.slice(1)}
               </span>
               <ExportShare 
@@ -171,7 +186,7 @@ export default function TripDetailsPage() {
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
-              📋 Overview
+              Overview
             </button>
             <button
               onClick={() => setActiveTab('itinerary')}
@@ -181,7 +196,7 @@ export default function TripDetailsPage() {
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
-              📍 Itinerary
+              Itinerary
             </button>
             <button
               onClick={() => setActiveTab('chat')}
@@ -191,7 +206,7 @@ export default function TripDetailsPage() {
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
-              💬 Chat History
+              Chat History
             </button>
           </div>
         </div>
@@ -201,55 +216,30 @@ export default function TripDetailsPage() {
           {/* Overview  */}
           {activeTab === 'overview' && (
             <div className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-900">Trip Information</h3>
-                  
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <span className="text-gray-600">Destination</span>
-                      <span className="font-medium text-gray-900">{trip.destination}</span>
-                    </div>
-                    
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <span className="text-gray-600">Duration</span>
-                      <span className="font-medium text-gray-900">{getDuration(trip.start_date, trip.end_date)} days</span>
-                    </div>
-                    
-                    {trip.budget && (
-                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <span className="text-gray-600">Budget</span>
-                        <span className="font-medium text-gray-900">${trip.budget.toLocaleString()}</span>
-                      </div>
-                    )}
-                    
-                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <span className="text-gray-600">Status</span>
-                      <span className={`px-3 py-1 rounded-full text-sm font-semibold border ${statusColors[trip.status as keyof typeof statusColors]}`}>
-                        {trip.status}
-                      </span>
-                    </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Trip Information</h3>
+                
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <span className="text-gray-600">Date</span>
+                    <span className="font-medium text-gray-900">{formatDate(trip.start_date)} - {formatDate(trip.end_date)}</span>
                   </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>
                   
-                  <div className="space-y-2">
-                    <Link
-                      href={`/chat?tripId=${trip.id}`}
-                      className="block w-full bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600 transition-colors text-center font-medium"
-                    >
-                      ✏️ Continue Planning
-                    </Link>
-                    
-                    <button className="block w-full bg-gray-100 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-200 transition-colors text-center font-medium">
-                      📅 Add to Calendar
-                    </button>
-                    
-                    <button className="block w-full bg-gray-100 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-200 transition-colors text-center font-medium">
-                      ✉️ Email Itinerary
-                    </button>
+                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <span className="text-gray-600">Duration</span>
+                    <span className="font-medium text-gray-900">{getDuration(trip.start_date, trip.end_date)} days</span>
+                  </div>
+                  
+                  {trip.budget && (
+                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <span className="text-gray-600">Budget</span>
+                      <span className="font-medium text-gray-900">${trip.budget.toLocaleString()}</span>
+                    </div>
+                  )}
+                  
+                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <span className="text-gray-600">Activities Planned</span>
+                    <span className="font-medium text-gray-900">{trip.itinerary?.activities?.length || 0} activities</span>
                   </div>
                 </div>
               </div>
@@ -267,26 +257,6 @@ export default function TripDetailsPage() {
                     ]}
                     currency="USD"
                   />
-                </div>
-              )}
-
-              {trip.itinerary && trip.itinerary.activities && (
-                <div className="pt-6 border-t border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Trip Highlights</h3>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {trip.itinerary.activities.slice(0, 4).map((activity: any, idx: number) => (
-                      <div key={idx} className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
-                        <div className="flex items-start gap-3">
-                          <span className="text-2xl">📍</span>
-                          <div>
-                            <h4 className="font-semibold text-gray-900">{activity.title}</h4>
-                            <p className="text-sm text-gray-600">{activity.description}</p>
-                            <p className="text-xs text-gray-500 mt-1">Day {activity.day} • {activity.time}</p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
                 </div>
               )}
             </div>
@@ -329,8 +299,6 @@ export default function TripDetailsPage() {
           {/* Chat History */}
           {activeTab === 'chat' && (
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900">Conversation History</h3>
-              
               {messages.length > 0 ? (
                 <div className="space-y-4">
                   {messages.map((msg, idx) => {

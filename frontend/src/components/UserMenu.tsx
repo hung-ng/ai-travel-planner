@@ -15,7 +15,7 @@ const currentUser: User = {
   id: 1,
   name: 'Jane Doe',
   email: 'jane@example.com',
-  avatar: '👤',
+  avatar: '',
 };
 
 export default function UserMenu() {
@@ -40,6 +40,15 @@ export default function UserMenu() {
     alert('Logout functionality will be implemented with real auth');
   };
 
+  // Get user initials
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(part => part[0])
+      .join('')
+      .toUpperCase();
+  };
+
   return (
     <div className="relative" ref={menuRef}>
       {/* Avatar Button */}
@@ -47,8 +56,8 @@ export default function UserMenu() {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-3 px-5 py-3 rounded-lg hover:bg-gray-100 transition-colors"
       >
-        <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-2xl">
-          {user.avatar}
+        <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+          {getInitials(user.name)}
         </div>
         <div className="hidden md:block text-left">
           <p className="text-lg font-semibold text-gray-900">{user.name}</p>
@@ -80,7 +89,6 @@ export default function UserMenu() {
               onClick={() => setIsOpen(false)}
               className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
             >
-              <span className="text-xl">👤</span>
               <div>
                 <div className="font-medium">My Profile</div>
                 <div className="text-xs text-gray-500">Manage preferences</div>
@@ -92,7 +100,6 @@ export default function UserMenu() {
               onClick={() => setIsOpen(false)}
               className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
             >
-              <span className="text-xl">🗺️</span>
               <div>
                 <div className="font-medium">My Trips</div>
                 <div className="text-xs text-gray-500">View all trips</div>
@@ -104,7 +111,6 @@ export default function UserMenu() {
               onClick={() => setIsOpen(false)}
               className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
             >
-              <span className="text-xl">💬</span>
               <div>
                 <div className="font-medium">New Trip</div>
                 <div className="text-xs text-gray-500">Plan with AI</div>
@@ -113,11 +119,21 @@ export default function UserMenu() {
 
             <div className="border-t border-gray-200 my-2"></div>
 
+            <Link
+              href="/login"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-3 px-3 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+            >
+              <div className="text-left">
+                <div className="font-medium">Log In</div>
+                <div className="text-xs text-blue-400">Sign in to account</div>
+              </div>
+            </Link>
+
             <button
               onClick={handleLogout}
               className="flex items-center gap-3 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors w-full"
             >
-              <span className="text-xl">🚪</span>
               <div className="text-left">
                 <div className="font-medium">Logout</div>
                 <div className="text-xs text-red-400">Sign out of account</div>

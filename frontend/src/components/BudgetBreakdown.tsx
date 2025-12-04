@@ -73,12 +73,16 @@ export default function BudgetBreakdown({
 
   return (
     <div className="space-y-6">
+      {/* Budget Overview Title */}
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900">Budget Overview</h3>
+      </div>
+
       {/* budget overview */}
       <div className="grid md:grid-cols-3 gap-4">
         <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-gray-600">Total Budget</span>
-            <span className="text-2xl">💰</span>
+            <span className="text-base text-gray-600">Total Budget</span>
           </div>
           <p className="text-3xl font-bold text-gray-900">
             ${totalBudget.toLocaleString()}
@@ -87,21 +91,16 @@ export default function BudgetBreakdown({
 
         <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-gray-600">Spent So Far</span>
-            <span className="text-2xl">💳</span>
+            <span className="text-base text-gray-600">Spent So Far</span>
           </div>
           <p className="text-3xl font-bold text-blue-600">
             ${totalSpent.toLocaleString()}
-          </p>
-          <p className="text-xs text-gray-500 mt-1">
-            {percentageUsed.toFixed(0)}% of budget
           </p>
         </div>
 
         <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-gray-600">Remaining</span>
-            <span className="text-2xl">{remaining >= 0 ? '✅' : '⚠️'}</span>
+            <span className="text-base text-gray-600">Remaining</span>
           </div>
           <p className={`text-3xl font-bold ${remaining >= 0 ? 'text-green-600' : 'text-red-600'}`}>
             ${Math.abs(remaining).toLocaleString()}
@@ -116,7 +115,7 @@ export default function BudgetBreakdown({
       <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-3">
           <h3 className="font-semibold text-gray-900">Budget Usage</h3>
-          <span className="text-sm text-gray-600">{percentageUsed.toFixed(1)}%</span>
+          <span className="text-base text-gray-600">{percentageUsed.toFixed(1)}%</span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
           <div 
@@ -129,11 +128,41 @@ export default function BudgetBreakdown({
           />
         </div>
         {percentageUsed > 80 && percentageUsed <= 100 && (
-          <p className="text-xs text-yellow-600 mt-2">⚠️ Approaching budget limit</p>
+          <p className="text-sm text-yellow-600 mt-2">⚠️ Approaching budget limit</p>
         )}
         {percentageUsed > 100 && (
-          <p className="text-xs text-red-600 mt-2">🚨 Over budget by ${(totalSpent - totalBudget).toLocaleString()}</p>
+          <p className="text-sm text-red-600 mt-2">❗ Over budget by ${(totalSpent - totalBudget).toLocaleString()}</p>
         )}
+      </div>
+
+      {/*  pie chart */}
+      <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+        <h3 className="font-semibold text-gray-900 mb-4">Budget Breakdown</h3>
+        
+        <div className="flex flex-wrap gap-6 justify-center">
+          {/* simple viz*/}
+          <div className="grid grid-cols-2 gap-4 w-full">
+            {categories.map(category => {
+              const amount = categoryTotals[category.key] || 0;
+              const percentage = totalSpent > 0 ? (amount / totalSpent) * 100 : 0;
+              
+              if (amount === 0) return null;
+              
+              return (
+                <div key={category.key} className={`${category.lightColor} rounded-lg p-4 border-2 border-gray-200`}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className={`text-base font-semibold ${category.textColor}`}>
+                      {category.label}
+                    </span>
+                    <p className="text-2xl font-bold text-gray-900">
+                      ${amount.toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       {/* Breakdown */}
@@ -153,10 +182,7 @@ export default function BudgetBreakdown({
                     <span className="text-sm font-medium text-gray-700">{category.label}</span>
                   </div>
                   <div className="text-right">
-                    <span className="text-sm font-bold text-gray-900">
-                      ${amount.toLocaleString()}
-                    </span>
-                    <span className="text-xs text-gray-500 ml-2">
+                    <span className="text-base text-gray-500">
                       {percentage.toFixed(0)}%
                     </span>
                   </div>
@@ -170,40 +196,6 @@ export default function BudgetBreakdown({
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/*  pie dhart */}
-      <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
-        <h3 className="font-semibold text-gray-900 mb-4">Budget Distribution</h3>
-        
-        <div className="flex flex-wrap gap-6 justify-center">
-          {/* simple viz*/}
-          <div className="grid grid-cols-2 gap-4 w-full">
-            {categories.map(category => {
-              const amount = categoryTotals[category.key] || 0;
-              const percentage = totalSpent > 0 ? (amount / totalSpent) * 100 : 0;
-              
-              if (amount === 0) return null;
-              
-              return (
-                <div key={category.key} className={`${category.lightColor} rounded-lg p-4 border-2 border-gray-200`}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-2xl">{category.icon}</span>
-                    <span className={`text-sm font-semibold ${category.textColor}`}>
-                      {category.label}
-                    </span>
-                  </div>
-                  <p className="text-2xl font-bold text-gray-900">
-                    ${amount.toLocaleString()}
-                  </p>
-                  <p className="text-xs text-gray-600 mt-1">
-                    {percentage.toFixed(1)}% of spending
-                  </p>
-                </div>
-              );
-            })}
-          </div>
         </div>
       </div>
 

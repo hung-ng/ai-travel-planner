@@ -42,9 +42,51 @@ export default function TripDashboard() {
 
   const loadTrips = async () => {
     try {
-      const data = await api.getAllTrips();
-      setTrips(data);
+      // Mock data for demo (replace with api.getAllTrips() when backend is ready)
+      const mockData: Trip[] = [
+        {
+          id: 1,
+          user_id: 1,
+          destination: 'Paris, France',
+          start_date: '2024-06-15',
+          end_date: '2024-06-22',
+          budget: 3500,
+          status: 'planning',
+          itinerary: { days: 7, activities: 21 },
+          created_at: '2024-01-15T10:00:00Z',
+          updated_at: '2024-01-20T15:30:00Z',
+        },
+        {
+          id: 2,
+          user_id: 1,
+          destination: 'Tokyo, Japan',
+          start_date: '2024-03-10',
+          end_date: '2024-03-20',
+          budget: 4200,
+          status: 'booked',
+          itinerary: { days: 10, activities: 35 },
+          created_at: '2023-12-01T09:00:00Z',
+          updated_at: '2024-01-05T11:20:00Z',
+        },
+        {
+          id: 3,
+          user_id: 1,
+          destination: 'Bali, Indonesia',
+          start_date: '2023-11-05',
+          end_date: '2023-11-15',
+          budget: 2800,
+          status: 'completed',
+          itinerary: { days: 10, activities: 28 },
+          created_at: '2023-09-10T14:00:00Z',
+          updated_at: '2023-11-16T08:45:00Z',
+        },
+      ];
+      setTrips(mockData);
       setLoading(false);
+      // Uncomment when backend is ready:
+      // const data = await api.getAllTrips();
+      // setTrips(data);
+      // setLoading(false);
     } catch (err) {
       console.error('Failed to load trips:', err);
       setError('Failed to load trips. Please try again.');
@@ -120,16 +162,13 @@ export default function TripDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/" className="text-blue-500 hover:text-blue-600 text-base font-bold mb-2 inline-block">
-            ← Back to Home
-          </Link>
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">My Trips</h1>
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-700 to-purple-700 bg-clip-text text-transparent">My Trips</h1>
             </div>
             <Link 
               href="/chat"
@@ -147,9 +186,8 @@ export default function TripDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-lg text-gray-600">Total Trips</p>
-                <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
               </div>
-              <div className="text-4xl">🌍</div>
+              <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
             </div>
           </div>
 
@@ -157,9 +195,8 @@ export default function TripDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-lg text-gray-600">Planning</p>
-                <p className="text-3xl font-bold text-blue-600">{stats.planning}</p>
               </div>
-              <div className="text-4xl">📝</div>
+              <p className="text-3xl font-bold text-blue-600">{stats.planning}</p>
             </div>
           </div>
 
@@ -167,9 +204,8 @@ export default function TripDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-lg text-gray-600">Booked</p>
-                <p className="text-3xl font-bold text-green-600">{stats.booked}</p>
               </div>
-              <div className="text-4xl">✅</div>
+              <p className="text-3xl font-bold text-green-600">{stats.booked}</p>
             </div>
           </div>
 
@@ -177,9 +213,8 @@ export default function TripDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-lg text-gray-600">Completed</p>
-                <p className="text-3xl font-bold text-purple-600">{stats.completed}</p>
               </div>
-              <div className="text-4xl">🎉</div>
+              <p className="text-3xl font-bold text-purple-600">{stats.completed}</p>
             </div>
           </div>
         </div>
